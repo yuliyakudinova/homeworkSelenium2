@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.netology.SelenTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-03-31T19:59:47" hostname="СЕРГЕЙ-ПК" time="16.714">
+  <properties/>
+  <testcase name="shouldSendForm()" classname="ru.netology.SelenTest" time="16.714"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Starting ChromeDriver 99.0.4844.51 (d537ec02474b5afe23684e7963d538896c63ac77-refs/branch-heads/4844@{#875}) on port 25312
+Only local connections are allowed.
+Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+ChromeDriver was started successfully.
+мар. 31, 2022 10:59:56 PM org.openqa.selenium.remote.ProtocolHandshake createSession
+INFO: Detected dialect: W3C
+]]></system-err>
+</testsuite>
