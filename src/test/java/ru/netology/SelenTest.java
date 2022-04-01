@@ -22,7 +22,11 @@ public class SelenTest {
 
      @BeforeEach
     public void setUp() {
-          driver = new ChromeDriver();
+         ChromeOptions options = new ChromeOptions();
+         options.addArguments("--disable-dev-shm-usage");
+         options.addArguments("--no-sandbox");
+         options.addArguments("--headless");
+         driver = new ChromeDriver(options);
      }
 
     @AfterEach
