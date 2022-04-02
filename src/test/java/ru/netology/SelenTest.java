@@ -15,25 +15,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SelenTest {
     private WebDriver driver;
 
-      @BeforeAll
-     public static void setUpAll(){
-          WebDriverManager.chromedriver().setup();
-        }
+    @BeforeAll
+    public static void setUpAll() {
+        WebDriverManager.chromedriver().setup();
+    }
 
-     @BeforeEach
+    @BeforeEach
     public void setUp() {
-         ChromeOptions options = new ChromeOptions();
-         options.addArguments("--disable-dev-shm-usage");
-         options.addArguments("--no-sandbox");
-         options.addArguments("--headless");
-         driver = new ChromeDriver(options);
-     }
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+    }
 
     @AfterEach
     public void tearDown() {
-     driver.quit();
-     driver = null;
-     }
+        driver.quit();
+        driver = null;
+    }
 
     @Test
     public void shouldSendForm() {
@@ -47,5 +47,32 @@ public class SelenTest {
         String expected = "Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.";
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void shouldCheckEnglishLang() {
+        driver.get("http://localhost:9999/");
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Kate Smith");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79348564466");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+
+        String actual = driver.findElement(By.cssSelector("div span.input__sub")).getText().trim();
+        String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldCheckWithoutPhone() {
+        driver.get("http://localhost:9999/");
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Михаил Салтыков-Щедрин");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+0");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+
+        String actual = driver.findElement(By.cssSelector("[data-test-id='phone'] span.input__sub")).getText().trim();
+        String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
+        assertEquals(expected, actual);
+    }
+
 
 }
