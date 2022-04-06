@@ -27,6 +27,7 @@ public class SelenTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--headless");
         driver = new ChromeDriver(options);
+        driver.get("http://localhost:9999/");
     }
 
     @AfterEach
@@ -37,7 +38,7 @@ public class SelenTest {
 
     @Test
     public void shouldSendForm() {
-        driver.get("http://localhost:9999/");
+
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Бунин Александр");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79348564466");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -50,7 +51,7 @@ public class SelenTest {
 
     @Test
     public void shouldCheckEnglishLang() {
-        driver.get("http://localhost:9999/");
+
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Kate Smith");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79348564466");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -63,7 +64,7 @@ public class SelenTest {
 
     @Test
     public void shouldCheckWithoutPhone() {
-        driver.get("http://localhost:9999/");
+
         driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Михаил Салтыков-Щедрин");
         driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+0");
         driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
@@ -73,6 +74,41 @@ public class SelenTest {
         String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
         assertEquals(expected, actual);
     }
+    @Test
+    public void shouldCheckWithoutAgreement() {
 
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Михаил Салтыков-Щедрин");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79204069326");
+        //driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
 
+        String actual = driver.findElement(By.cssSelector("[data-test-id=agreement] span.checkbox__text")).getText().trim();
+        String expected = "Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldCheckWithEmptyName() {
+
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79204069326");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+
+        String actual = driver.findElement(By.cssSelector("[data-test-id='name'] span.input__sub")).getText().trim();
+        String expected = "Поле обязательно для заполнения";
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void shouldCheckWithEmptyPhone() {
+
+        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Максим Горький");
+        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+
+        String actual = driver.findElement(By.cssSelector("[data-test-id='phone'] span.input__sub")).getText().trim();
+        String expected = "Поле обязательно для заполнения";
+        assertEquals(expected, actual);
+    }
 }
